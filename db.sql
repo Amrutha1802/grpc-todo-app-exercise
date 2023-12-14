@@ -1,7 +1,7 @@
 --creation queries
 
 --create a data base 
-sqlite3 todo_database.db
+sqlite3 todo.db
 
 --Table todo_lists
 CREATE TABLE todos (

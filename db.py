@@ -3,14 +3,15 @@
 
 def check_for_id(mycursor, todo_id):
     """
-    Check if a todo with the given ID already exists in the database.
+    Checks if a todo with the given ID already exists in the database.
 
     Parameters:
     - mycursor (sqlite3.cursor): SQLite database cursor object.
     - todo_id (int): The ID of the todo to be checked.
 
     Raises:
-    - Exception: If a todo with the given ID already exists in the database.
+    -Exception if todo with the given id exists
+
     """
     try:
         sql = "select 1 from todos where id=?"
@@ -34,9 +35,6 @@ def add_todo(connection, request, pb2):
     Returns:
     - pb2.Todo: The newly added todo.
 
-    Raises:
-    - sqlite3.Error: If there is an error in the SQLite database operation.
-    - Exception: If there is an error during the addition of the todo.
     """
     todo = {"id": request.id, "title": request.title, "status": request.status}
     try:
@@ -68,9 +66,6 @@ def get_all_todos(connection, pb2):
     Returns:
     - pb2.ListAllTodosResponse: A response object containing a list of all todos.
 
-    Raises:
-    - sqlite3.Error: If there is an error in the SQLite database operation.
-    - Exception: If there is any other error during the retrieval of todos.
     """
     try:
         mycursor = connection.cursor()
