@@ -3,7 +3,7 @@
 --create a data base 
 sqlite3 todo.db
 
---Table todo_lists
+--Table todo
 CREATE TABLE todos (
     id INTEGER PRIMARY KEY,
     title TEXT,
