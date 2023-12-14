@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service TodoService{
+    rpc ListAllTodos(ListAllTodosRequest) returns (ListAllTodosResponse){}
+    rpc AddTodo(Todo) returns (Todo){}
+
+}
+
+
+message Todo{
+    int32 id = 1;
+    string title = 2;
+    Status status = 3; 
+}
+
+message ListAllTodosRequest{}
+
+message ListAllTodosResponse{
+    repeated Todo todos = 1;
+}
+
+enum Status {
+    UNDEFINED_STATUS = 0;
+    INCOMPLETE = 1;
+    COMPLETE = 2;
+}
+
