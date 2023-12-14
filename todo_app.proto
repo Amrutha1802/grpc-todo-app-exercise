@@ -1,20 +1,29 @@
 syntax = "proto3";
 
 service TodoService{
-    
+    rpc CreateUser(User) returns (User)
     rpc ListAllTodos(ListAllTodosRequest) returns (ListAllTodosResponse){}
     rpc AddTodo(Todo) returns (Todo){}
+    rpc DeleteTodo(Todo) returns (DeleteResponse){}
+    rpc EditTodo(Todo) returns (Todo){}
 
 }
 
+message User{
+    int32 id=1;
+    string name=2;
+}
 
 message Todo{
-    int32 id = 1;
-    string title = 2;
-    Status status = 3; 
+    int32 userId=1;
+    int32 id = 2;
+    string title = 3;
+    Status status = 4; 
 }
 
-message ListAllTodosRequest{}
+message ListAllTodosRequest{
+    int32 userId=1;
+}
 
 message ListAllTodosResponse{
     repeated Todo todos = 1;
