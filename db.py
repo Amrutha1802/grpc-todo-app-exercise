@@ -1,7 +1,10 @@
 # implement ddl queries here
+import sqlite3
+
+connection = sqlite3.connect("todo.db", check_same_thread=False)
 
 
-def check_for_id(mycursor, todo_id, user_id):
+def check_for_todo(connection, todo_id, user_id):
     """
     Checks if a todo with the given ID already exists in the database.
 
@@ -13,17 +16,20 @@ def check_for_id(mycursor, todo_id, user_id):
     -Exception if todo with the given id exists
 
     """
+    mycursor = connection.cursor()
     try:
-        sql = "select 1 from todos where id=? and user_id=?"
+        sql = "select 1 from todo_items where id=? and user_id=?"
         mycursor.execute(sql, (todo_id, user_id))
         result = mycursor.fetchone()
         if result:
-            raise Exception(f"todo with an {todo_id} already exists")
+            return True
+        else:
+            return False
     except Exception as e:
         raise e
 
 
-def check_for_user(mycursor, user_id):
+def check_for_user(connection, user_id):
     """
     Checks if a user with user_id has todos in the database.
 
@@ -35,8 +41,9 @@ def check_for_user(mycursor, user_id):
     -Exception if todo with the given id exists
 
     """
+    mycursor = connection.cursor()
     try:
-        sql = "select 1 from todos where user_id=? "
+        sql = "select 1 from todo_items where user_id=? "
         mycursor.execute(sql, (user_id,))
         result = mycursor.fetchone()
         if result:
@@ -68,8 +75,9 @@ def add_todo(connection, request, pb2):
     }
     try:
         mycursor = connection.cursor()
-        check_for_id(mycursor, todo["id"])
-        sql = "insert into todos_with_userId(id,user_id,title,status) values(?,?,?,?) "
+        if check_for_todo(connection, todo["id"], todo["user_id"]):
+            raise Exception(f"todo with an {todo['id']} already exists")
+        sql = "insert into todo_items(id,user_id,title,status) values(?,?,?,?) "
         val = (todo["id"], todo["user_id"], todo["title"], todo["status"])
         mycursor.execute(sql, val)
         connection.commit()
@@ -104,12 +112,15 @@ def edit_todo(connection, request, pb2):
     """
     try:
         mycursor = connection.cursor()
-        check_for_id(mycursor, request.id)
-        sql = "update todos_with_userId SET title =?, status = ? WHERE id = ? AND user_id = ?;"
+        if not check_for_todo(connection, request.id, request.user_id):
+            raise Exception(
+                f"todo with an id {request.id} donot exist, so it cannot be edited"
+            )
+        sql = "update todo_items SET title =?, status = ? WHERE id = ? AND user_id = ?;"
         val = (request.title, request.status, request.id, request.user_id)
         mycursor.execute(sql, val)
         connection.commit()
-        print("Todo item added")
+        print("Todo item edited")
         return pb2.Todo(
             id=request.id,
             user_id=request.user_id,
@@ -140,8 +151,11 @@ def delete_todo(connection, request, pb2):
     """
     try:
         mycursor = connection.cursor()
-        check_for_id(mycursor, request.id)
-        sql = "delete from todos_with_userId where id = ? and user_id = ?;"
+        if not check_for_todo(connection, request.id, request.user_id):
+            raise Exception(
+                f"todo with an id {request.id} donot exist, so it cannot be deleted"
+            )
+        sql = "delete from todo_items where id = ? and user_id = ?;"
         val = (request.id, request.user_id)
         mycursor.execute(sql, val)
         connection.commit()
@@ -170,18 +184,17 @@ def get_all_todos(connection, request, pb2):
     """
     try:
         mycursor = connection.cursor()
-        if check_for_user(request.user_id):
-            sql = "select id,title,status from todos where user_id=?"
-            val = (request.user_id,)
-            mycursor.execute(sql, val)
-            result = mycursor.fetchall()
-            todos_list = []
-            for row in result:
-                dict = {"id": row[0], "title": row[1], "status": row[2]}
-                todos_list.append(dict)
-            return pb2.ListAllTodosResponse(todos=todos_list)
-        else:
+        if not check_for_user(mycursor, request.user_id):
             raise Exception(f"The user with given id {request.user_id} has no todo's")
+        sql = "select id,title,status from todo_items where user_id=?"
+        val = (request.user_id,)
+        mycursor.execute(sql, val)
+        result = mycursor.fetchall()
+        todos_list = []
+        for row in result:
+            dict = {"id": row[0], "title": row[1], "status": row[2]}
+            todos_list.append(dict)
+        return pb2.ListAllTodosResponse(todos=todos_list)
     except connection.Error as e:
         raise e
     except Exception as e:

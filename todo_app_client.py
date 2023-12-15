@@ -12,7 +12,8 @@ class TodoClient(object):
         pass
 
     def list_all(self):
-        request = pb2.ListAllTodosRequest()
+        request = pb2.ListAllTodosRequest(user_id=1)
+        print(request)
         response = self.stub.ListAllTodos(request)
         return response
 

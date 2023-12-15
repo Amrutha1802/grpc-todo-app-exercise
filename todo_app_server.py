@@ -5,15 +5,15 @@ import todo_app_pb2_grpc as pb2_grpc
 import db as mydb
 import sqlite3
 
-connection = sqlite3.connect("todo.db", check_same_thread=False)
+# connection = sqlite3.connect("todo.db", check_same_thread=False)
 
 
 class TodoAppServer(pb2_grpc.TodoServiceServicer):
     def AddTodo(self, request, context):
-        return mydb.add_todo(connection, request, pb2)
+        return mydb.add_todo(request, pb2)
 
     def ListAllTodos(self, request, context):
-        return mydb.get_all_todos(connection, pb2)
+        return mydb.get_all_todos(request, pb2)
 
 
 def serve():

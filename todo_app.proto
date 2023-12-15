@@ -1,38 +1,27 @@
 syntax = "proto3";
 
-
-service TodoService{
-    rpc ListAllTodos(ListAllTodosRequest) returns (ListAllTodosResponse){}
-    rpc AddTodo(Todo) returns (Todo){}
-    rpc DeleteTodo(Todo) returns (EmptyResponse){}
-    rpc EditTodo(Todo) returns (Todo){}
+service TodoService {
+  rpc ListAllTodos(ListAllTodosRequest) returns (ListAllTodosResponse) {}
+  rpc AddTodo(Todo) returns (Todo) {}
+  rpc DeleteTodo(Todo) returns (EmptyResponse) {}
+  rpc EditTodo(Todo) returns (Todo) {}
 }
 
-
-message Todo{
-    int32 id = 1;
-    int32 user_id = 2;
-    string title = 3;
-    Status status = 4; 
+message Todo {
+  int32 id = 1;
+  int32 user_id = 2;
+  string title = 3;
+  Status status = 4;
 }
 
+message EmptyResponse {}
 
-message EmptyResponse{}
+message ListAllTodosRequest { int32 user_id = 1; }
 
-
-message ListAllTodosRequest{
-    int32 user_id = 1;
-}
-
-
-message ListAllTodosResponse{
-    repeated Todo todos = 1;
-}
-
+message ListAllTodosResponse { repeated Todo todos = 1; }
 
 enum Status {
-    UNDEFINED_STATUS = 0;
-    INCOMPLETE = 1;
-    COMPLETE = 2;
+  UNDEFINED_STATUS = 0;
+  INCOMPLETE = 1;
+  COMPLETE = 2;
 }
-
