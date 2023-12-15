@@ -1,7 +1,12 @@
 # implement ddl queries here
 
 
-def check_for_id(mycursor, todo_id):
+class TodoDB():
+    def __init__(self):
+        self.db_conn = # sqlite connection
+    # see if you can create a with constraint
+
+def _check_for_id(mycursor, todo_id):
     """
     Checks if a todo with the given ID already exists in the database.
 
@@ -23,7 +28,7 @@ def check_for_id(mycursor, todo_id):
         raise e
 
 
-def add_todo(connection, request, pb2):
+def add_todo(title):
     """
     Add a new todo to the SQLite database.
 
