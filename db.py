@@ -1,19 +1,18 @@
 # implement ddl queries here
-import sqlite3
-
-connection = sqlite3.connect("todo.db", check_same_thread=False)
 
 
 def check_for_todo(connection, todo_id, user_id):
     """
-    Checks if a todo with the given ID already exists in the database.
+    Checks if a todo with the given ID and user_id already exists in the database.
 
     Parameters:
+    - connection(sqlite3.connection):SQLite databse connection object.
     - mycursor (sqlite3.cursor): SQLite database cursor object.
     - todo_id (int): The ID of the todo to be checked.
 
-    Raises:
-    -Exception if todo with the given id exists
+    Returns:
+    -True : if todo with the given id and user_id exists in the database
+    -False : if todo with the given id and user_id doesnot exists in the database
 
     """
     mycursor = connection.cursor()
@@ -27,6 +26,9 @@ def check_for_todo(connection, todo_id, user_id):
             return False
     except Exception as e:
         raise e
+    finally:
+        if mycursor:
+            mycursor.close()
 
 
 def check_for_user(connection, user_id):
@@ -37,9 +39,9 @@ def check_for_user(connection, user_id):
     - mycursor (sqlite3.cursor): SQLite database cursor object.
     - user_id (int): The ID of the todo to be checked.
 
-    Raises:
-    -Exception if todo with the given id exists
-
+    Returns:
+    -True : if user with given user_id exists in the database
+    -False : if user with given user_id does not exists in the database
     """
     mycursor = connection.cursor()
     try:
@@ -52,6 +54,9 @@ def check_for_user(connection, user_id):
             return False
     except Exception as e:
         raise e
+    finally:
+        if mycursor:
+            mycursor.close()
 
 
 def add_todo(connection, request, pb2):
@@ -99,7 +104,7 @@ def add_todo(connection, request, pb2):
 
 def edit_todo(connection, request, pb2):
     """
-    Add a new todo to the SQLite database.
+    Edits a todo with given id and user_id if it exists in the SQLite database.
 
     Parameters:
     - connection (sqlite3.Connection): The SQLite database connection.
@@ -172,27 +177,27 @@ def delete_todo(connection, request, pb2):
 
 def get_all_todos(connection, request, pb2):
     """
-    Retrieve all todos from the SQLite database.
+    Retrieve all todos from the SQLite database of a particular user with given user_id.
 
     Parameters:
     - connection (sqlite3.Connection): The SQLite database connection.
     - pb2: The protocol buffer module.
 
     Returns:
-    - pb2.ListAllTodosResponse: A response object containing a list of all todos.
+    - pb2.ListAllTodosResponse: A response object containing a list of all todos of a user with given user_id.
 
     """
     try:
         mycursor = connection.cursor()
-        if not check_for_user(mycursor, request.user_id):
+        if not check_for_user(connection, request.user_id):
             raise Exception(f"The user with given id {request.user_id} has no todo's")
-        sql = "select id,title,status from todo_items where user_id=?"
+        sql = "select id,user_id,title,status from todo_items where user_id=?"
         val = (request.user_id,)
         mycursor.execute(sql, val)
         result = mycursor.fetchall()
         todos_list = []
         for row in result:
-            dict = {"id": row[0], "title": row[1], "status": row[2]}
+            dict = {"id": row[0], "user_id": row[1], "title": row[2], "status": row[3]}
             todos_list.append(dict)
         return pb2.ListAllTodosResponse(todos=todos_list)
     except connection.Error as e:

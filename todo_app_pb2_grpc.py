@@ -26,7 +26,7 @@ class TodoServiceStub(object):
                 )
         self.DeleteTodo = channel.unary_unary(
                 '/TodoService/DeleteTodo',
-                request_serializer=todo__app__pb2.Todo.SerializeToString,
+                request_serializer=todo__app__pb2.DeleteTodoRequest.SerializeToString,
                 response_deserializer=todo__app__pb2.EmptyResponse.FromString,
                 )
         self.EditTodo = channel.unary_unary(
@@ -78,7 +78,7 @@ def add_TodoServiceServicer_to_server(servicer, server):
             ),
             'DeleteTodo': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteTodo,
-                    request_deserializer=todo__app__pb2.Todo.FromString,
+                    request_deserializer=todo__app__pb2.DeleteTodoRequest.FromString,
                     response_serializer=todo__app__pb2.EmptyResponse.SerializeToString,
             ),
             'EditTodo': grpc.unary_unary_rpc_method_handler(
@@ -142,7 +142,7 @@ class TodoService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/TodoService/DeleteTodo',
-            todo__app__pb2.Todo.SerializeToString,
+            todo__app__pb2.DeleteTodoRequest.SerializeToString,
             todo__app__pb2.EmptyResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
