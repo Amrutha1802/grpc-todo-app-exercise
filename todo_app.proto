@@ -8,23 +8,19 @@ service TodoService{
 }
 
 
-message TodoRequest{
+message Todo{
     int32 id = 1;
     int32 userId = 2;
     string title = 3;
     Status status = 4; 
 }
-message EmptyResponse{
 
-}
+message EmptyResponse{}
+
 message ListAllTodosRequest{
     int32 userId = 1;
 }
-message Todo{
-    int32 id = 1;
-    string title = 2;
-    Status status = 3; 
-}
+
 message ListAllTodosResponse{
     repeated Todo todos = 1;
 }
