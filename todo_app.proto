@@ -1,10 +1,8 @@
 syntax = "proto3";
 
 service TodoService{
-    
     rpc ListAllTodos(ListAllTodosRequest) returns (ListAllTodosResponse){}
     rpc AddTodo(Todo) returns (Todo){}
-
 }
 
 
