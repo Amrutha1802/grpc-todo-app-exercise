@@ -2,6 +2,11 @@ import grpc
 from concurrent import futures
 import todo_app_pb2 as pb2
 import todo_app_pb2_grpc as pb2_grpc
+import db as mydb
+import sqlite3
+
+# connection = sqlite3.connect("todo.db", check_same_thread=False)
+db_conn = sqlite3.connect("todo.db", check_same_thread=False)
 from db import TodoDB
 
 
@@ -10,20 +15,17 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
         self.todo_db = todo_db
 
     def AddTodo(self, request, context):
-        try:
-            if len(request.title) == 0:
-                raise Exception("Title cannot be empty")
-            todo = self.todo_db.add_todo(request.title, request.status)
-            return pb2.Todo(id=todo["id"], title=todo["title"], status=todo["status"])
-        except:
-            raise
+        """
+        input
+        creating todo in db
+
+        input is in pb
+        db functions operate with python data structures
+        """
+        return add_todo(request)
 
     def ListAllTodos(self, request, context):
-        try:
-            todos_list = self.todo_db.list_all_todos()
-            return pb2.ListAllTodosResponse(todos=todos_list)
-        except:
-            raise
+        return mydb.get_all_todos(db_conn, pb2)
 
 
 def serve():
