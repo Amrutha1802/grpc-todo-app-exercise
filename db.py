@@ -1,4 +1,49 @@
 # implement ddl queries here
+import sqlite3
+
+
+class TodoDB:
+    def __init__(self):
+        # self.db_conn = sqlite3.connect("todo.db")
+        # self.cursor = self.db_conn.cursor()
+        # Replace 'your_database_name.db' with the actual name of your SQLite database file
+        db_file = "todo.db"
+        # Using a context manager to create a connection and cursor
+        with sqlite3.connect(db_file) as db_conn:
+            # The connection is established within this block
+            # Operations inside this block can use the 'conn' object
+
+            # Create a cursor object to execute SQL queries
+            cursor = db_conn.cursor()
+
+            # Example: Create a table if it doesn't exist
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS todo_items (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    title TEXT,
+    status INTEGER
+)
+            """
+            )
+
+            # Example: Insert data into the table
+            cursor.execute(
+                "INSERT INTO users (username, email) VALUES (?, ?)",
+                ("john_doe", "john@example.com"),
+            )
+
+            # Commit the changes to the database
+            db_conn.commit()
+
+        # The connection is automatically closed when exiting the 'with' block
+
+
+# No need to explicitly close the connection or cursor
+
+
+# see if you can create a with constraint
 
 
 def check_for_todo(connection, todo_id, user_id):
