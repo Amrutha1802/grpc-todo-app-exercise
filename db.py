@@ -3,12 +3,12 @@ import sqlite3
 
 class TodoDB:
     def __init__(self, db_file="todo.db"):
-        self.db_file = db_file
+        self.db_conn = sqlite3.connect(db_file, check_same_thread=False)
         self._create_table()
 
     def _create_table(self):
         try:
-            with sqlite3.connect(self.db_file) as db_conn:
+            with self.db_conn as db_conn:
                 cursor = db_conn.cursor()
                 cursor.execute(
                     """
@@ -19,32 +19,5 @@ class TodoDB:
                     )
                     """
                 )
-        except sqlite3.Error as e:
-            raise e
-
-    def add_todo(self, title, status):
-        try:
-            with sqlite3.connect(self.db_file) as db_conn:
-                sql = "insert into todo_items(title,status) values(?,?) "
-                val = (title, status)
-                cursor = db_conn.cursor()
-                cursor.execute(sql, val)
-                inserted_id = cursor.lastrowid
-                db_conn.commit()
-                return {"id": inserted_id, "title": title, "status": status}
-
-        except sqlite3.Error as e:
-            raise e
-
-    def list_all_todos(self):
-        try:
-            with sqlite3.connect(self.db_file) as db_conn:
-                cursor = db_conn.cursor()
-                cursor.execute("SELECT id, title, status FROM todo_items")
-                rows = cursor.fetchall()
-                todos = [
-                    {"id": row[0], "title": row[1], "status": row[2]} for row in rows
-                ]
-                return todos
         except sqlite3.Error as e:
             raise e
