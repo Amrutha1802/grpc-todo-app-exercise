@@ -9,7 +9,8 @@ Before running the application, make sure you have the following installed:
 - Python 3.x
 - gRPC (install with `pip install grpcio`)
 - SQLite3 (usually comes with Python)
-- Create a mysql database: todo
+
+Create a mysql database: todo
 
 ### To generate pb2 and pb2_grpc files
 
@@ -18,6 +19,7 @@ Before running the application, make sure you have the following installed:
 ### To run grpc server
 
 `python todo_server.py`
+
 The server will start at localhost:50051
 
 ### gRPC Client
@@ -30,19 +32,20 @@ You can use the provided gRPC client to interact with the server. Refer to the t
 
 ##### AddTodo
 
-Adds a new ToDo item.
+Adds a new Todo item.
+
 `rpc AddTodo (Todo) returns (Todo);`
 
 #### ListAllTodos
 
 ##### Lists all existing ToDo items.
 
-`rpc ListAllTodos (Empty) returns (ListAllTodosResponse);``
+`rpc ListAllTodos (Empty) returns (ListAllTodosResponse);`
 
 ### Project Structure
 
 - todo_app_server.py: Implementation of the gRPC server.
 - todo_app_client.py: Example client to interact with the gRPC server.
 - todo_app.proto: Protocol Buffers definition file.
-- db.py: SQLite3 database setup and helper functions.
+- db.py: SQLite3 database setup.
 - todo_app_pb2.py and todo_app_pb2_grpc.py: Generated files from the Protocol Buffers definition.
