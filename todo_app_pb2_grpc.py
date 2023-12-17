@@ -14,10 +14,10 @@ class TodoServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.ListAllTodos = channel.unary_unary(
-                '/TodoService/ListAllTodos',
-                request_serializer=todo__app__pb2.ListAllTodosRequest.SerializeToString,
-                response_deserializer=todo__app__pb2.ListAllTodosResponse.FromString,
+        self.GetUserTodos = channel.unary_unary(
+                '/TodoService/GetUserTodos',
+                request_serializer=todo__app__pb2.User.SerializeToString,
+                response_deserializer=todo__app__pb2.UserTodos.FromString,
                 )
         self.AddTodo = channel.unary_unary(
                 '/TodoService/AddTodo',
@@ -39,7 +39,7 @@ class TodoServiceStub(object):
 class TodoServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def ListAllTodos(self, request, context):
+    def GetUserTodos(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -66,10 +66,10 @@ class TodoServiceServicer(object):
 
 def add_TodoServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'ListAllTodos': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListAllTodos,
-                    request_deserializer=todo__app__pb2.ListAllTodosRequest.FromString,
-                    response_serializer=todo__app__pb2.ListAllTodosResponse.SerializeToString,
+            'GetUserTodos': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUserTodos,
+                    request_deserializer=todo__app__pb2.User.FromString,
+                    response_serializer=todo__app__pb2.UserTodos.SerializeToString,
             ),
             'AddTodo': grpc.unary_unary_rpc_method_handler(
                     servicer.AddTodo,
@@ -97,7 +97,7 @@ class TodoService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def ListAllTodos(request,
+    def GetUserTodos(request,
             target,
             options=(),
             channel_credentials=None,
@@ -107,9 +107,9 @@ class TodoService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TodoService/ListAllTodos',
-            todo__app__pb2.ListAllTodosRequest.SerializeToString,
-            todo__app__pb2.ListAllTodosResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/TodoService/GetUserTodos',
+            todo__app__pb2.User.SerializeToString,
+            todo__app__pb2.UserTodos.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

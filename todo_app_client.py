@@ -12,17 +12,19 @@ class TodoClient(object):
         pass
 
     def list_all(self):
-        request = pb2.ListAllTodosRequest(user_id=2)
+        request = pb2.User(id=1)
         print(request)
-        response = self.stub.ListAllTodos(request)
+        response = self.stub.GetUserTodos(request)
         return response
 
     def delete_todo(self):
-        request = pb2.DeleteTodoRequest(id=34, user_id=2)
+        request = pb2.DeleteTodoRequest(id=34)
         response = self.stub.DeleteTodo(request)
         return response
 
 
 if __name__ == "__main__":
     client = TodoClient()
-    todos_response = client.delete_todo()
+    todos_response = client.list_all()
+    for list in todos_response:
+        print(list)
