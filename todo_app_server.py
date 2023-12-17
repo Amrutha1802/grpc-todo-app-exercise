@@ -37,7 +37,7 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                 ]
             return pb2.ListAllTodosResponse(todos=todos_list)
         except:
-            raise e
+            raise
 
 
 def serve():
