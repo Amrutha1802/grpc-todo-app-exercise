@@ -9,7 +9,9 @@ class TodoClient(object):
         self.stub = pb2_grpc.TodoServiceStub(self.channel)
 
     def add_todo(self):
-        pass
+        request = pb2.Todo(title="study mysql", status=1)
+        response = self.stub.AddTodo(request)
+        return response
 
     def list_all(self):
         request = pb2.ListAllTodosRequest()
@@ -23,3 +25,6 @@ if __name__ == "__main__":
     print("All Todos:")
     for todo in todos_response.todos:
         print(todo)
+    todos_response = client.add_todo()
+    print("todo is")
+    print(todos_response)

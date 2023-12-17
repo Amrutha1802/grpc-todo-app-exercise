@@ -7,17 +7,20 @@ class TodoDB:
         self._create_table()
 
     def _create_table(self):
-        with sqlite3.connect(self.db_file) as db_conn:
-            cursor = db_conn.cursor()
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS todo_items (
-                    id INTEGER PRIMARY KEY,
-                    title TEXT,
-                    status INTEGER
+        try:
+            with sqlite3.connect(self.db_file) as db_conn:
+                cursor = db_conn.cursor()
+                cursor.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS todo_items (
+                        id INTEGER PRIMARY KEY,
+                        title TEXT,
+                        status INTEGER
+                    )
+                    """
                 )
-                """
-            )
+        except sqlite3.Error as e:
+            raise e
 
     def add_todo(self, title, status):
         try:
@@ -26,7 +29,10 @@ class TodoDB:
                 val = (title, status)
                 cursor = db_conn.cursor()
                 cursor.execute(sql, val)
+                inserted_id = cursor.lastrowid
                 db_conn.commit()
+                return {"id": inserted_id, "title": title, "status": status}
+
         except sqlite3.Error as e:
             raise e
 

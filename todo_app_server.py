@@ -12,9 +12,9 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
     def AddTodo(self, request, context):
         try:
             if len(request.title) == 0:
-                raise Exception("title cannot be empty")
-            self.todo_db.add_todo(request.title, request.status)
-            return pb2.Todo(id=request.id, title=request.title, status=request.status)
+                raise Exception("Title cannot be empty")
+            todo = self.todo_db.add_todo(request.title, request.status)
+            return pb2.Todo(id=todo["id"], title=todo["title"], status=todo["status"])
         except:
             raise
 
