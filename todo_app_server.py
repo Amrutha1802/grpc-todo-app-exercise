@@ -15,8 +15,8 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
     def _check_for_todo(self, id):
         try:
             with self.todo_db.db_conn as db_conn:
-                cursor = db_conn.cursor
-                sql = "select 1 from todo_items where id=? and user_id=?"
+                cursor = db_conn.cursor()
+                sql = "select 1 from todos where id=?"
                 cursor.execute(sql, (id,))
                 result = cursor.fetchone()
                 if result:
@@ -49,9 +49,9 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
     def GetUserTodos(self, request, context):
         try:
             with self.todo_db.db_conn as db_conn:
-                cursor = db_conn.cursor
-                sql = "select id,user_id,title,status from todo_items where user_id=?"
-                val = (request.user_id,)
+                cursor = db_conn.cursor()
+                sql = "select id,user_id,title,status from todos where user_id=?"
+                val = (request.id,)
                 cursor.execute(sql, val)
                 result = cursor.fetchall()
                 todos_list = []
@@ -74,8 +74,8 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                     raise Exception(
                         f"Todo with an id {request.id} donot exist, so it cannot be deleted"
                     )
-                cursor = db_conn.cursor
-                sql = "delete from todo_items where id = ? "
+                cursor = db_conn.cursor()
+                sql = "delete from todos where id = ? "
                 val = (request.id,)
                 cursor.execute(sql, val)
                 connection.commit()
@@ -91,7 +91,7 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                     raise Exception(
                         f"Todo with an id {request.id} donot exist, so it cannot be deleted"
                     )
-                cursor = db_conn.cursor
+                cursor = db_conn.cursor()
                 update_sql = "UPDATE todos SET"
                 update_params = []
                 if request.title:
@@ -101,8 +101,8 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                     update_sql += " status=?,"
                     update_params.append(request.status)
                 update_sql = update_sql.rstrip(",")
-                update_sql += " WHERE id=? and user_id=?"
-                update_params.extend([request.id, request.user_id])
+                update_sql += " WHERE id=? "
+                update_params.extend([request.id])
                 cursor.execute(update_sql, update_params)
                 db_conn.commit()
                 return pb2.Todo(
