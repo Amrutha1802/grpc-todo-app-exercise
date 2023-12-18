@@ -18,7 +18,7 @@ Create a mysql database: todo
 
 ### To run grpc server
 
-`python todo_server.py`
+`python todo_app_server.py`
 
 The server will start at localhost:50051
 
@@ -26,7 +26,7 @@ The server will start at localhost:50051
 
 You can use the provided gRPC client to interact with the server. Refer to the todo_app_client.py file for examples on how to use the client.
 
-`python client.py`
+`python todo_app_client.py`
 
 #### gRPC Service Methods
 
