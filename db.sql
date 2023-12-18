@@ -4,7 +4,7 @@
 sqlite3 todo.db
 
 --Table todo
-CREATE TABLE todo_items (
+CREATE TABLE todos (
     id INTEGER PRIMARY KEY,
     user_id INTEGER,
     title TEXT,

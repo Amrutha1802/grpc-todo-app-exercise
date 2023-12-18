@@ -3,9 +3,6 @@ from concurrent import futures
 import todo_app_pb2 as pb2
 import todo_app_pb2_grpc as pb2_grpc
 from db import TodoDB
-import sqlite3
-
-connection = sqlite3.connect("todo.db", check_same_thread=False)
 
 
 class TodoAppServer(pb2_grpc.TodoServiceServicer):
@@ -36,7 +33,6 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                 cursor = db_conn.cursor()
                 cursor.execute(sql, val)
                 inserted_id = cursor.lastrowid
-                db_conn.commit()
                 return pb2.Todo(
                     id=inserted_id,
                     user_id=request.user_id,
@@ -78,7 +74,6 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                 sql = "delete from todos where id = ? "
                 val = (request.id,)
                 cursor.execute(sql, val)
-                connection.commit()
                 print("Todo item removed")
                 return pb2.EmptyResponse()
         except:
@@ -104,13 +99,24 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                 update_sql += " WHERE id=? "
                 update_params.extend([request.id])
                 cursor.execute(update_sql, update_params)
-                db_conn.commit()
-                return pb2.Todo(
-                    id=request.id,
-                    user_id=request.user_id,
-                    title=request.title,
-                    status=request.status,
-                )
+                sql = "select id,user_id,title,status from todos where id=?"
+                val = (request.id,)
+                cursor.execute(sql, val)
+                result = cursor.fetchall()
+                if result:
+                    row = result[0]
+                    todo = {
+                        "id": row[0],
+                        "user_id": row[1],
+                        "title": row[2],
+                        "status": row[3],
+                    }
+            return pb2.Todo(
+                id=todo["id"],
+                user_id=todo["user_id"],
+                title=todo["title"],
+                status=todo["status"],
+            )
         except:
             raise
 
