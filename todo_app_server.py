@@ -19,7 +19,6 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
                 cursor = db_conn.cursor()
                 cursor.execute(sql, val)
                 inserted_id = cursor.lastrowid
-                db_conn.commit()
                 return pb2.Todo(
                     id=inserted_id, title=request.title, status=request.status
                 )

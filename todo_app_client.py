@@ -9,7 +9,7 @@ class TodoClient(object):
         self.stub = pb2_grpc.TodoServiceStub(self.channel)
 
     def add_todo(self):
-        request = pb2.Todo(title="study mysql", status=1)
+        request = pb2.Todo(title="complete grpc exercise", status=2)
         response = self.stub.AddTodo(request)
         return response
 
