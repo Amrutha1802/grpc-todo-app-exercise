@@ -1,27 +1,21 @@
 import grpc
 from concurrent import futures
+
 import todo_app_pb2 as pb2
 import todo_app_pb2_grpc as pb2_grpc
 from db import TodoDB
+from todo import Todo
 
 
 class TodoAppServer(pb2_grpc.TodoServiceServicer):
     def __init__(self, todo_db):
         self.todo_db = todo_db
+        self.todo = Todo()
 
     def AddTodo(self, request, context):
-        try:
-            if len(request.title) == 0:
-                raise Exception("Title cannot be empty")
-            with self.todo_db.db_conn as db_conn:
-                sql = "insert into todo_items(title,status) values(?,?) "
-                val = (request.title, request.status)
-                cursor = db_conn.cursor()
-                cursor.execute(sql, val)
-                inserted_id = cursor.lastrowid
-            return pb2.Todo(id=inserted_id, title=request.title, status=request.status)
-        except:
-            raise
+        resp = self.todo.add_todo(request)
+        return resp
+
 
     def ListAllTodos(self, request, context):
         try:

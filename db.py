@@ -15,7 +15,7 @@ class TodoDB:
                     CREATE TABLE IF NOT EXISTS todo_items (
                         id INTEGER PRIMARY KEY,
                         title TEXT,
-                        status INTEGER
+                        status TEXT
                     )
                     """
                 )
