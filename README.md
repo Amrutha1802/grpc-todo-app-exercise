@@ -4,13 +4,14 @@ This is a simple ToDo application implemented using gRPC, Protocol Buffers, and 
 
 ## Prerequisites
 
-Before running the application, make sure you have the following installed:
+Before running the application, install following dependencies:
 
-- Python 3.x
-- gRPC (install with `pip install grpcio`)
+- Python 3.8.10
 - SQLite3 (usually comes with Python)
 
-Create a mysql database: todo
+`pip install requirements.txt`
+
+Create a sqlite3 database: todo
 
 ### To generate pb2 and pb2_grpc files
 
@@ -47,5 +48,5 @@ Adds a new Todo item.
 - todo_app_server.py: Implementation of the gRPC server.
 - todo_app_client.py: Example client to interact with the gRPC server.
 - todo_app.proto: Protocol Buffers definition file.
-- db.py: SQLite3 database setup.
+- todo.py: SQLite3 database setup.
 - todo_app_pb2.py and todo_app_pb2_grpc.py: Generated files from the Protocol Buffers definition.

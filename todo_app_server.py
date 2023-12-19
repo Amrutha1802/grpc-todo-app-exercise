@@ -10,12 +10,12 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
         self.todo = Todo()
 
     def AddTodo(self, request, context):
-        resp = self.todo.add_todo(request)
-        return resp
+        response = self.todo.add_todo(request)
+        return response
 
     def ListAllTodos(self, request, context):
-        resp = self.todo.list_all_todos(request)
-        return resp
+        response = self.todo.list_all_todos(request)
+        return response
 
 
 def serve():
