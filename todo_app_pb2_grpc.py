@@ -14,13 +14,23 @@ class TodoServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.ListAllTodos = channel.unary_unary(
-                '/TodoService/ListAllTodos',
-                request_serializer=todo__app__pb2.ListAllTodosRequest.SerializeToString,
-                response_deserializer=todo__app__pb2.ListAllTodosResponse.FromString,
+        self.GetUserTodos = channel.unary_unary(
+                '/TodoService/GetUserTodos',
+                request_serializer=todo__app__pb2.User.SerializeToString,
+                response_deserializer=todo__app__pb2.UserTodos.FromString,
                 )
         self.AddTodo = channel.unary_unary(
                 '/TodoService/AddTodo',
+                request_serializer=todo__app__pb2.Todo.SerializeToString,
+                response_deserializer=todo__app__pb2.Todo.FromString,
+                )
+        self.DeleteTodo = channel.unary_unary(
+                '/TodoService/DeleteTodo',
+                request_serializer=todo__app__pb2.DeleteTodoRequest.SerializeToString,
+                response_deserializer=todo__app__pb2.EmptyResponse.FromString,
+                )
+        self.EditTodo = channel.unary_unary(
+                '/TodoService/EditTodo',
                 request_serializer=todo__app__pb2.Todo.SerializeToString,
                 response_deserializer=todo__app__pb2.Todo.FromString,
                 )
@@ -29,7 +39,7 @@ class TodoServiceStub(object):
 class TodoServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def ListAllTodos(self, request, context):
+    def GetUserTodos(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -41,16 +51,38 @@ class TodoServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeleteTodo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def EditTodo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_TodoServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'ListAllTodos': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListAllTodos,
-                    request_deserializer=todo__app__pb2.ListAllTodosRequest.FromString,
-                    response_serializer=todo__app__pb2.ListAllTodosResponse.SerializeToString,
+            'GetUserTodos': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUserTodos,
+                    request_deserializer=todo__app__pb2.User.FromString,
+                    response_serializer=todo__app__pb2.UserTodos.SerializeToString,
             ),
             'AddTodo': grpc.unary_unary_rpc_method_handler(
                     servicer.AddTodo,
+                    request_deserializer=todo__app__pb2.Todo.FromString,
+                    response_serializer=todo__app__pb2.Todo.SerializeToString,
+            ),
+            'DeleteTodo': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteTodo,
+                    request_deserializer=todo__app__pb2.DeleteTodoRequest.FromString,
+                    response_serializer=todo__app__pb2.EmptyResponse.SerializeToString,
+            ),
+            'EditTodo': grpc.unary_unary_rpc_method_handler(
+                    servicer.EditTodo,
                     request_deserializer=todo__app__pb2.Todo.FromString,
                     response_serializer=todo__app__pb2.Todo.SerializeToString,
             ),
@@ -65,7 +97,7 @@ class TodoService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def ListAllTodos(request,
+    def GetUserTodos(request,
             target,
             options=(),
             channel_credentials=None,
@@ -75,9 +107,9 @@ class TodoService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TodoService/ListAllTodos',
-            todo__app__pb2.ListAllTodosRequest.SerializeToString,
-            todo__app__pb2.ListAllTodosResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/TodoService/GetUserTodos',
+            todo__app__pb2.User.SerializeToString,
+            todo__app__pb2.UserTodos.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -93,6 +125,40 @@ class TodoService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/TodoService/AddTodo',
+            todo__app__pb2.Todo.SerializeToString,
+            todo__app__pb2.Todo.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteTodo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/TodoService/DeleteTodo',
+            todo__app__pb2.DeleteTodoRequest.SerializeToString,
+            todo__app__pb2.EmptyResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EditTodo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/TodoService/EditTodo',
             todo__app__pb2.Todo.SerializeToString,
             todo__app__pb2.Todo.FromString,
             options, channel_credentials,
