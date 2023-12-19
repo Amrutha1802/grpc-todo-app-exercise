@@ -27,6 +27,7 @@ class TodoAppServer(pb2_grpc.TodoServiceServicer):
         try:
             if len(request.title) == 0:
                 raise Exception("Title cannot be empty")
+            # Add user id validation
             with self.todo_db.db_conn as db_conn:
                 sql = "insert into todos(title,user_id,status) values(?,?,?) "
                 val = (request.title, request.user_id, request.status)
