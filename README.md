@@ -24,7 +24,7 @@ The server will start at localhost:50051
 
 ### gRPC Client
 
-You can use the provided gRPC client to interact with the server. Refer to the todo_app_client.py file for examples on how to use the client.
+You can use the provided gRPC client to interact with the server. Refer to the `todo_app_client.py` file for examples on how to use the client.
 
 `python todo_app_client.py`
 

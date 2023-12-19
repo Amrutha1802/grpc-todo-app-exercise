@@ -1,2 +1,6 @@
 __pycache__/
-__todo.db__/
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+

@@ -7,7 +7,7 @@ sqlite3 todo.db
 CREATE TABLE todo_items (
     id INTEGER PRIMARY KEY,
     title TEXT,
-    status INTEGER
+    status TEXT
 );
 
 
