@@ -35,13 +35,26 @@ You can use the provided gRPC client to interact with the server. Refer to the `
 
 Adds a new Todo item.
 
-`rpc AddTodo (Todo) returns (Todo);`
+`rpc AddTodo (Todo) returns (Todo){}`
+
+##### AddUser
+
+Adds a new User.
+
+`rpc AddUser(User) returns (User) {}`
+
+#### GetUsers
+
+Lists all existing users.
+
+`rpc GetUsers(EmptyRequest) returns (UsersList) {}
+`
 
 #### GetUserTodos
 
-Lists all existing ToDo items of a user.
+Lists all existing Todo items of a user.
 
-`rpc ListAllTodos (Empty) returns (ListAllTodosResponse);`
+`rpc ListAllTodos (Empty) returns (ListAllTodosResponse){}`
 
 #### DeleteTodo
 
