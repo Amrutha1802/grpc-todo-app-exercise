@@ -34,6 +34,16 @@ class TodoServiceStub(object):
                 request_serializer=todo__app__pb2.Todo.SerializeToString,
                 response_deserializer=todo__app__pb2.Todo.FromString,
                 )
+        self.AddUser = channel.unary_unary(
+                '/TodoService/AddUser',
+                request_serializer=todo__app__pb2.User.SerializeToString,
+                response_deserializer=todo__app__pb2.User.FromString,
+                )
+        self.GetUsers = channel.unary_unary(
+                '/TodoService/GetUsers',
+                request_serializer=todo__app__pb2.EmptyRequest.SerializeToString,
+                response_deserializer=todo__app__pb2.UsersList.FromString,
+                )
 
 
 class TodoServiceServicer(object):
@@ -63,6 +73,18 @@ class TodoServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AddUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetUsers(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_TodoServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -85,6 +107,16 @@ def add_TodoServiceServicer_to_server(servicer, server):
                     servicer.EditTodo,
                     request_deserializer=todo__app__pb2.Todo.FromString,
                     response_serializer=todo__app__pb2.Todo.SerializeToString,
+            ),
+            'AddUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddUser,
+                    request_deserializer=todo__app__pb2.User.FromString,
+                    response_serializer=todo__app__pb2.User.SerializeToString,
+            ),
+            'GetUsers': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUsers,
+                    request_deserializer=todo__app__pb2.EmptyRequest.FromString,
+                    response_serializer=todo__app__pb2.UsersList.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -161,5 +193,39 @@ class TodoService(object):
         return grpc.experimental.unary_unary(request, target, '/TodoService/EditTodo',
             todo__app__pb2.Todo.SerializeToString,
             todo__app__pb2.Todo.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/TodoService/AddUser',
+            todo__app__pb2.User.SerializeToString,
+            todo__app__pb2.User.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetUsers(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/TodoService/GetUsers',
+            todo__app__pb2.EmptyRequest.SerializeToString,
+            todo__app__pb2.UsersList.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -5,6 +5,8 @@ service TodoService {
   rpc AddTodo(Todo) returns (Todo) {}
   rpc DeleteTodo(DeleteTodoRequest) returns (EmptyResponse) {}
   rpc EditTodo(Todo) returns (Todo) {}
+  rpc AddUser(User) returns (User) {}
+  rpc GetUsers(EmptyRequest) returns (UsersList) {}
 }
 
 message Todo {
@@ -14,11 +16,18 @@ message Todo {
   Status status = 4;
 }
 
-message User { int32 id = 1; }
+message User {
+  int32 id = 1;
+  string name = 2;
+}
+
+message UsersList { repeated User users = 1; }
 
 message UserTodos { repeated Todo todos = 1; }
 
 message EmptyResponse {}
+
+message EmptyRequest {}
 
 message DeleteTodoRequest { int32 id = 1; }
 
@@ -27,6 +36,3 @@ enum Status {
   INCOMPLETE = 1;
   COMPLETE = 2;
 }
-
-
-
