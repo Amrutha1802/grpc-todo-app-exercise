@@ -1,6 +1,6 @@
-# ToDo Application with gRPC, Protocol Buffers, and SQLite3
+# Todo Application with gRPC, Protocol Buffers, and SQLite3
 
-This is a simple ToDo application implemented using gRPC, Protocol Buffers, and SQLite3 in Python. The application allows you to add ToDo items of a user, edit todo, list all todos of a user, delete a todo.
+This is a simple Todo application implemented using gRPC, Protocol Buffers, and SQLite3 in Python. The application allows you to add ToDo items of a user, edit todo, list all todos of a user, delete a todo.
 
 ## Prerequisites
 
