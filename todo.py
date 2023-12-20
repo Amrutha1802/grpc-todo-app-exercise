@@ -6,23 +6,6 @@ import todo_app_pb2 as todo_pb2
 class Todo:
     def __init__(self):
         self.db_conn = sqlite3.connect("todo.db", check_same_thread=False)
-        self._create_table()
-
-    def _create_table(self):
-        try:
-            with self.db_conn as db_conn:
-                cursor = db_conn.cursor()
-                cursor.execute(
-                    """
-                    CREATE TABLE IF NOT EXISTS todo_items (
-                        id INTEGER PRIMARY KEY,
-                        title TEXT,
-                        status TEXT
-                    )
-                    """
-                )
-        except sqlite3.Error as e:
-            raise e
 
     def add_todo(self, request):
         try:
